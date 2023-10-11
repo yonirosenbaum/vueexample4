@@ -1,16 +1,26 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png" />
-  <HelloWorld msg="Welcome to Your Vue.js App" />
+  <div class="container">
+    <BreedList
+      :activeBreeds="activeBreeds"
+      @update-active-breeds="updateAllActiveBreeds"
+    />
+    <BreedImages
+      :activeBreeds="activeBreeds"
+      @update-active-breeds="updateAllActiveBreeds"
+    />
+  </div>
 </template>
 
-<script>
-import HelloWorld from "./components/HelloWorld.vue";
+<script setup>
+import { ref } from "vue";
+import BreedList from "./components/BreedList.vue";
+import BreedImages from "./components/BreedImages.vue";
+import { localStorage } from "./services/storage/breeds";
 
-export default {
-  name: "App",
-  components: {
-    HelloWorld,
-  },
+const activeBreeds = ref(localStorage.getActiveBreeds() ?? []);
+const updateAllActiveBreeds = (breeds) => {
+  activeBreeds.value = breeds;
+  localStorage.setActiveBreeds(activeBreeds.value);
 };
 </script>
 
@@ -22,5 +32,19 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+</style>
+<style lang="scss" scoped>
+.container {
+  display: flex;
+  overflow-x: scroll;
+  min-width: 450px;
+  max-width: 1440px;
+  margin: 0 auto;
+  justify-content: space-around;
+  gap: 30px;
+  @media only screen and (max-width: 750px) {
+    flex-direction: column-reverse;
+  }
 }
 </style>
